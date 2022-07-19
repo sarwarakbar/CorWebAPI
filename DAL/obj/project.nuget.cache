@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "a5DLsW/XEpzBl4K0UCOkC96W1V8wYrLAf/oFGh+eYr/bKjLxGLsQSnV1Umg6kCKI+dzMnxT2KjYC9YPrTc6oEw==",
+  "dgSpecHash": "Ep5bZo8xEwJq3wFF0SRj3adZWDPObu61iHzgHa6Qbe2jTRak6P+VX9B41TgQUMFflw4cvUX+73IFuTTi+Sgdtg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\DELL\\source\\repos\\DAL\\DAL.csproj",
+  "projectFilePath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.0\\microsoft.aspnetcore.jsonpatch.5.0.0.nupkg.sha512",

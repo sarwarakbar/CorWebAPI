@@ -35,9 +35,10 @@ namespace CoreWebApi.Controllers
         public IEnumerable<Prize> GetPrize()
         {
             return db.Prizes.Include(c => c.Laureates).ToList();
-           
 
         }
+
+        //Get records from Laureates table
         [HttpGet]
         [Route("laureates")]
         public IEnumerable<Laureate> GetLaureate()
@@ -46,42 +47,37 @@ namespace CoreWebApi.Controllers
 
         }
 
+        //Get All Records by Year
         [HttpGet]
         [Route("all")]
         public IEnumerable<Prize> GetAll()
         {
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.Year).ToList();
-
         }
 
-        [HttpPut]
-        [Route("update/{id}")]
-        public string Update(int id, Prize prize1)
+        //Get All Records by PrizeID
+        [HttpGet]
+        [Route("all2")]
+        public IEnumerable<Prize> GetAll()
         {
-            var data = db.Prizes.Include(c => c.Laureates).FirstOrDefault(g => g.PrizeId == id);
-            var data1 = db.Prizes.Update(prize1).Entity.Laureates;
-
-           
-            
-
-            db.SaveChanges();
-            return "Prize Updated";
+            return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.PrizeId).ToList();
         }
 
-
+        //Get Details by ID
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Prize>> GetDetailsbyID(int id)
         {
             var record = await db.Prizes.Include(c => c.Laureates).Where(c => c.PrizeId == id).FirstOrDefaultAsync();
-            
-            if (record==null)
+
+            if (record == null)
             {
                 return NotFound();
             }
-                       
+
             return record;
         }
+
 
         //Add New Record
         [HttpPost]
@@ -90,7 +86,7 @@ namespace CoreWebApi.Controllers
         {
             try
             {
-               var data= db.Prizes.Add(prize1).Entity.Laureates;
+                var data = db.Prizes.Add(prize1).Entity.Laureates;
                 db.SaveChanges();
                 return "Prize Added";
             }
@@ -99,28 +95,21 @@ namespace CoreWebApi.Controllers
                 return "Enter Correct credentials!";
             }
         }
+
+
         //Update Record
         [HttpPut]
         [Route("update")]
         public Prize UpdatePrizeById(int id, Prize prize1)
         {
-            Laureate lr = new Laureate();
-           
+
             var data = db.Prizes.Include(l => l.Laureates).FirstOrDefault(p => p.PrizeId == id);
             if (data != null)
             {
                 data.Year = prize1.Year;
                 data.Category = prize1.Category;
+                data.Laureates = prize1.Laureates;
                 data.OverallMotivation = prize1.OverallMotivation;
-                foreach (var item in data.Laureates)
-                {
-
-                    item.Firstname = lr.Firstname;
-                    item.Surname = lr.Surname;                     
-                    item.Motivation = lr.Motivation;
-                    item.Share = lr.Share;
-                   
-                }
 
                 db.SaveChanges();
             }
@@ -128,9 +117,10 @@ namespace CoreWebApi.Controllers
             return data;
         }
 
-        //Delete the Record
+
+        //Delete Record
         [HttpGet]
-        [Route("deleterecord")]    
+        [Route("deleterecord")]
         public string Delete(int id)
         {
             try
@@ -198,19 +188,15 @@ namespace CoreWebApi.Controllers
         [HttpPost]
         [Route("UploadFile")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult>UploadFile(IFormFile file, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
         {
             var result = await WriteFile(file);
-            return Ok(result +" File Uploaded");
+            return Ok(result + " File Uploaded");
         }
 
-         
     }
 
-
-
-    
 
 }
 
