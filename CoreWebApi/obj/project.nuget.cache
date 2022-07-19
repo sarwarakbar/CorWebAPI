@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/9HL6iZn3yGk9ta/OOTB/vdRugrOLHodUt19cYOJ88cnNS0ziNIugeypWu0aAWaWgldUkpRDWAEUTh/cF4HPsw==",
+  "dgSpecHash": "9R3mj3GapEXM+g19noe73fKNntXKAbgDjcyAI3haCmjRaGiAzVI50/wtn8pz7zkctALqdxFCnu6nwXzHmUSpUQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\DELL\\source\\repos\\CoreWebApi\\CoreWebApi.csproj",
+  "projectFilePath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\CoreWebApi\\CoreWebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.0\\microsoft.aspnetcore.jsonpatch.5.0.0.nupkg.sha512",
