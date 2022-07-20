@@ -30,13 +30,14 @@ namespace CoreWebApi.Controllers
             this.db = db;
         }
 
+
         // GET: api/<DataPrizeController>
         [HttpGet]
         public IEnumerable<Prize> GetPrize()
         {
             return db.Prizes.Include(c => c.Laureates).ToList();
-
         }
+
 
         //Get records from Laureates table
         [HttpGet]
@@ -44,19 +45,18 @@ namespace CoreWebApi.Controllers
         public IEnumerable<Laureate> GetLaureate()
         {
             return db.Laureates.ToList();
-
         }
+
 
         //Get All Records by Laureate ID in Ascending Order
         [HttpGet]
         [Route("List-laureateID")]
         public async Task<ActionResult<Laureate>> GetLaureatesAsc()
         {
-
             var data = await db.Laureates.Include(c => c.Prize).OrderBy(x => x.LaureateId).ToListAsync();
             return Ok(data);
-
         }
+
 
         //Get All Records by Year
         [HttpGet]
@@ -66,6 +66,7 @@ namespace CoreWebApi.Controllers
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.Year).ToList();
         }
 
+
         //Get All Records by PrizeID
         [HttpGet]
         [Route("ListByPrizeID")]
@@ -73,6 +74,33 @@ namespace CoreWebApi.Controllers
         {
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.PrizeId).ToList();
         }
+
+
+        //Get All Records by Category & Year.
+        [HttpGet]
+        [Route("ListByYear-Category")]
+        public IEnumerable<Prize> GetByYearCategory(string cat, string year)
+        {
+            return db.Prizes.Include(c => c.Laureates).Where(x => x.Category.ToLower().Contains(cat.ToLower()) && x.Year.ToLower() == year).ToList();
+        }
+
+
+
+        //Get All Records by Laureate First Name.
+        [HttpGet]
+        [Route("LaureateByFirstName")]
+        public async Task<ActionResult<Laureate>> GetLaureateByName(string name)
+        {
+            var data = await db.Laureates.Include(c => c.Prize).Where(x => x.Firstname.ToLower().Contains(name.ToLower())).ToListAsync();
+
+            if(data==null)
+            {
+                return NotFound();
+            }
+
+            return Ok(data);
+        }
+
 
         //Get List by ID
         [HttpGet]
@@ -85,14 +113,13 @@ namespace CoreWebApi.Controllers
             {
                 return NotFound();
             }
-
             return record;
         }
 
 
         //Add New Record
         [HttpPost]
-        [Route("Add")]
+        [Route("AddRecord")]
         public string Post(Prize prize1)
         {
             try
@@ -148,8 +175,6 @@ namespace CoreWebApi.Controllers
             }
         }
 
-
-
         [HttpGet]
         [Route("NobelPrize")]
         public IEnumerable<NobelPrize> GetNobelPrizes()
@@ -172,6 +197,8 @@ namespace CoreWebApi.Controllers
             return result;
         }
 
+
+        //Code for file uploading.
         private async Task<string> WriteFile(IFormFile file)
         {
             string fileName = "";
