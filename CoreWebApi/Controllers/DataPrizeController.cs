@@ -58,7 +58,7 @@ namespace CoreWebApi.Controllers
         //Get All Records by PrizeID
         [HttpGet]
         [Route("all2")]
-        public IEnumerable<Prize> GetAll()
+        public IEnumerable<Prize> GetAll2()
         {
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.PrizeId).ToList();
         }
