@@ -47,9 +47,20 @@ namespace CoreWebApi.Controllers
 
         }
 
+        //Get All Records by Laureate ID in Ascending Order
+        [HttpGet]
+        [Route("List-laureateID")]
+        public async Task<ActionResult<Laureate>> GetLaureatesAsc()
+        {
+
+            var data = await db.Laureates.Include(c => c.Prize).OrderBy(x => x.LaureateId).ToListAsync();
+            return Ok(data);
+
+        }
+
         //Get All Records by Year
         [HttpGet]
-        [Route("all")]
+        [Route("ListByYear")]
         public IEnumerable<Prize> GetAll()
         {
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.Year).ToList();
@@ -57,13 +68,13 @@ namespace CoreWebApi.Controllers
 
         //Get All Records by PrizeID
         [HttpGet]
-        [Route("all2")]
+        [Route("ListByPrizeID")]
         public IEnumerable<Prize> GetAll2()
         {
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.PrizeId).ToList();
         }
 
-        //Get Details by ID
+        //Get List by ID
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Prize>> GetDetailsbyID(int id)
@@ -81,7 +92,7 @@ namespace CoreWebApi.Controllers
 
         //Add New Record
         [HttpPost]
-        [Route("add")]
+        [Route("Add")]
         public string Post(Prize prize1)
         {
             try
@@ -99,7 +110,7 @@ namespace CoreWebApi.Controllers
 
         //Update Record
         [HttpPut]
-        [Route("update")]
+        [Route("UpdateByPrizeID")]
         public Prize UpdatePrizeById(int id, Prize prize1)
         {
 
@@ -119,8 +130,8 @@ namespace CoreWebApi.Controllers
 
 
         //Delete Record
-        [HttpGet]
-        [Route("deleterecord")]
+        [HttpDelete]
+        [Route("DeleteByID")]
         public string Delete(int id)
         {
             try
