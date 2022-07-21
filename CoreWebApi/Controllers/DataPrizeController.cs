@@ -198,23 +198,37 @@ namespace CoreWebApi.Controllers
         }
 
 
-        //Code for file uploading.
         private async Task<string> WriteFile(IFormFile file)
         {
+            string FileName = @"C:\Users\DELL\Desktop\BlueTshirt5.jpg";
+
             string fileName = "";
             try
             {
+
                 var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
-                fileName = DateTime.Now.Ticks + extension;
+                //fileName = DateTime.Now.Ticks + extension;
+
+                fileName = System.IO.Path.GetFileName(FileName);
                 var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files");
                 if (!Directory.Exists(pathBuilt))
                 {
                     Directory.CreateDirectory(pathBuilt);
                 }
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files", fileName);
-                using (var stream = new FileStream(path, FileMode.Create))
+
+
+                if (System.IO.File.Exists(path) == true)
                 {
-                    await file.CopyToAsync(stream);
+                    return "File already exist";
+                }
+                else
+                {
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
             }
             catch (Exception ex)
@@ -230,7 +244,7 @@ namespace CoreWebApi.Controllers
         public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
         {
             var result = await WriteFile(file);
-            return Ok(result + " File Uploaded");
+            return Ok(result);
         }
 
     }
