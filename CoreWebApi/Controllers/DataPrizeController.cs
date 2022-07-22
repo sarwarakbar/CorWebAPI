@@ -196,46 +196,43 @@ namespace CoreWebApi.Controllers
                           }).ToList();
             return result;
         }
-
-
+        
         private async Task<string> WriteFile(IFormFile file)
         {
-            string FileName = @"C:\Users\DELL\Desktop\BlueTshirt5.jpg";
-
             string fileName = "";
             try
             {
-
-                var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
-                //fileName = DateTime.Now.Ticks + extension;
-
-                fileName = System.IO.Path.GetFileName(FileName);
                 var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files");
+
                 if (!Directory.Exists(pathBuilt))
                 {
                     Directory.CreateDirectory(pathBuilt);
                 }
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files", fileName);
 
+                //Get file extension              
+                fileName = file.FileName;
 
-                if (System.IO.File.Exists(path) == true)
+                var fileNameWithPath = Path.Combine(pathBuilt, fileName);
+
+                if (System.IO.File.Exists(fileNameWithPath) == true)
                 {
-                    return "File already exist";
+                    return fileName + " file already exist.";
                 }
                 else
                 {
-
-                    using (var stream = new FileStream(path, FileMode.Create))
+                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
-            return fileName;
+
+            return fileName + " is uploaded successfully";
         }
+
 
         [HttpPost]
         [Route("UploadFile")]

@@ -130,3 +130,4 @@ C:\Users\DELL\Desktop\LocalRepoProject\CoreWebApi\obj\Debug\net5.0\CoreWebApi.dl
 C:\Users\DELL\Desktop\LocalRepoProject\CoreWebApi\obj\Debug\net5.0\ref\CoreWebApi.dll
 C:\Users\DELL\Desktop\LocalRepoProject\CoreWebApi\obj\Debug\net5.0\CoreWebApi.pdb
 C:\Users\DELL\Desktop\LocalRepoProject\CoreWebApi\obj\Debug\net5.0\CoreWebApi.genruntimeconfig.cache
+C:\Users\DELL\Desktop\LocalRepoProject\CoreWebApi\bin\Debug\net5.0\Upload\files\Customer.json
