@@ -244,6 +244,29 @@ namespace CoreWebApi.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet]
+        [Route("DownloadFile")]
+        public async Task<ActionResult> DownloadFile(string Namefile)
+        {
+            //...Code for validation and get the file
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files", Namefile);
+            if (System.IO.File.Exists(filePath))
+            {
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(filePath, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                return File(bytes, contentType, Path.GetFileName(filePath));
+            }
+            else
+            {
+                return Ok ( "File not found.");
+            }
+        }
+
     }
 
 
