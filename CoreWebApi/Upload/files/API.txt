@@ -1,0 +1,127 @@
+ Scaffold-DbContext "Data Source=.;Initial Catalog=DbPrize;Integrated Security=True" Microsoft.EntityFrameWorkCore.SqlServer -outputdir Repository/Models -context PrizeDbContext -contextdir Repository -DataAnnotations -Force
+
+
+Install-Package Microsoft.EntityFrameworkCore.Tools -Version 5.0.10
+
+
+1. web api layer -
+2. business layer - logic
+3. data access layer -
+
+
+
+ [Serializable]
+        public class Rootobject
+        {
+            public Prize[] prizes { get; set; }
+        }
+
+        public class Prize
+        {
+            public string year { get; set; }
+            public string category { get; set; }
+            public Laureate[] laureates { get; set; }
+            public string overallMotivation { get; set; }
+        }
+
+        public class Laureate
+        {
+            public string id { get; set; }
+            public string firstname { get; set; }
+            public string surname { get; set; }
+            public string motivation { get; set; }
+            public string share { get; set; }
+        }
+
+
+
+ [Column("prizeID")]        
+        [Required]
+        public int prizeID { get; set; }
+
+
+        [Column("year")]
+        [Required]
+        [StringLength(50)]
+        public string year { get; set; }
+
+        [Column("category")]
+        [Required]
+        [StringLength(50)]
+        public string category { get; set; }
+
+        [Column("laureates")]
+        [Required]
+        public Laureate[] laureates { get; set; }
+
+        [Column("overallMotivation")]
+        [Required]
+        [StringLength(500)]
+        public string overallMotivation { get; set; }  
+
+
+
+
+ [Column("id")]
+        [Required]
+        public int id { get; set; }
+
+        [Column("firstname")]
+        [Required]
+        [StringLength(50)]
+        public string firstname { get; set; }
+
+        [Column("surname")]
+        [Required]
+        [StringLength(50)]
+        public string surname { get; set; }
+
+        [Column("motivation")]
+        [Required]
+        [StringLength(500)]
+        public string motivation { get; set; }
+
+        [Column("share")]
+        [Required]
+        public int share { get; set; }
+
+        [ForeignKey("prizeID")]
+        public virtual Prize Prize { get; set; }
+
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+                var connectionString = configuration.GetConnectionString("ConStringDatabase");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
+
+
+
+
+  //modelBuilder.Entity<Prize>(entity =>
+            //{
+
+            //    entity.Property(e => e.year);
+            //    entity.Property(e => e.category);
+            //    entity.Property(e => e.overallMotivation);
+
+            //});
+            //modelBuilder.Entity<Laureate>(entity =>
+            //{
+
+            //    entity.Property(e => e.id);
+            //    entity.Property(e => e.firstname);
+            //    entity.Property(e => e.surname);
+            //    entity.Property(e => e.motivation);
+            //    entity.Property(e => e.share);
+
+            //});
+  
