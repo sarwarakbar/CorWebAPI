@@ -31,7 +31,11 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj": {
+                "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -118,9 +122,6 @@
             "projectReferences": {
               "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj": {
                 "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj"
-              },
-              "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj": {
-                "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj"
               }
             }
           }
@@ -209,11 +210,7 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {
-              "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj": {
-                "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {

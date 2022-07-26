@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-
 using System.IO;
 using System.Threading;
 using Microsoft.AspNetCore.StaticFiles;
@@ -17,6 +16,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using System.Data;
+using BAL.Service;
+using DAL.Interface;
 
 namespace CoreWebApi.Controllers
 {
@@ -24,251 +25,96 @@ namespace CoreWebApi.Controllers
     [ApiController]
     public class DataPrizeController : ControllerBase
     {
-        AppDbContext db;
-        public DataPrizeController(AppDbContext db)
+        private readonly PrizeService service;
+        private readonly IRepository<Prize> _Prize;
+
+        public DataPrizeController(PrizeService service, IRepository<Prize> _Prize)
         {
-            this.db = db;
+            this.service = service;
+            this._Prize = _Prize;
         }
 
 
-        // GET: api/<DataPrizeController>
-        [HttpGet]
-        public IEnumerable<Prize> GetPrize()
+        //Get All Prizes
+        [HttpGet("GetAll")]
+        public Object GetAllPrizes()
         {
-            return db.Prizes.Include(c => c.Laureates).ToList();
-        }
-
-
-        //Get records from Laureates table
-        [HttpGet]
-        [Route("laureates")]
-        public IEnumerable<Laureate> GetLaureate()
-        {
-            return db.Laureates.ToList();
-        }
-
-
-        //Get All Records by Laureate ID in Ascending Order
-        [HttpGet]
-        [Route("List-laureateID")]
-        public async Task<ActionResult<Laureate>> GetLaureatesAsc()
-        {
-            var data = await db.Laureates.Include(c => c.Prize).OrderBy(x => x.LaureateId).ToListAsync();
-            return Ok(data);
-        }
-
-
-        //Get All Records by Year
-        [HttpGet]
-        [Route("ListByYear")]
-        public IEnumerable<Prize> GetAll()
-        {
-            return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.Year).ToList();
-        }
-
-
-        //Get All Records by PrizeID
-        [HttpGet]
-        [Route("ListByPrizeID")]
-        public IEnumerable<Prize> GetAll2()
-        {
-            return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.PrizeId).ToList();
-        }
-
-
-        //Get All Records by Category & Year.
-        [HttpGet]
-        [Route("ListByYear-Category")]
-        public IEnumerable<Prize> GetByYearCategory(string cat, string year)
-        {
-            return db.Prizes.Include(c => c.Laureates).Where(x => x.Category.ToLower().Contains(cat.ToLower()) && x.Year.ToLower() == year).ToList();
-        }
-
-
-
-        //Get All Records by Laureate First Name.
-        [HttpGet]
-        [Route("LaureateByFirstName")]
-        public async Task<ActionResult<Laureate>> GetLaureateByName(string name)
-        {
-            var data = await db.Laureates.Include(c => c.Prize).Where(x => x.Firstname.ToLower().Contains(name.ToLower())).ToListAsync();
-
-            if(data==null)
-            {
-                return NotFound();
-            }
-
-            return Ok(data);
-        }
-
-
-        //Get List by ID
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<Prize>> GetDetailsbyID(int id)
-        {
-            var record = await db.Prizes.Include(c => c.Laureates).Where(c => c.PrizeId == id).FirstOrDefaultAsync();
-
-            if (record == null)
-            {
-                return NotFound();
-            }
-            return record;
-        }
-
-
-        //Add New Record
-        [HttpPost]
-        [Route("AddRecord")]
-        public string Post(Prize prize1)
-        {
-            try
-            {
-                var data = db.Prizes.Add(prize1).Entity.Laureates;
-                db.SaveChanges();
-                return "Prize Added";
-            }
-            catch (Exception)
-            {
-                return "Enter Correct credentials!";
-            }
-        }
-
-
-        //Update Record
-        [HttpPut]
-        [Route("UpdateByPrizeID")]
-        public Prize UpdatePrizeById(int id, Prize prize1)
-        {
-
-            var data = db.Prizes.Include(l => l.Laureates).FirstOrDefault(p => p.PrizeId == id);
-            if (data != null)
-            {
-                data.Year = prize1.Year;
-                data.Category = prize1.Category;
-                data.Laureates = prize1.Laureates;
-                data.OverallMotivation = prize1.OverallMotivation;
-
-                db.SaveChanges();
-            }
-
+            var data = service.GetAllPrizes();
             return data;
         }
 
-
-        //Delete Record
-        [HttpDelete]
-        [Route("DeleteByID")]
-        public string Delete(int id)
+        //Add Prize  
+        [HttpPost("AddPrize")]
+        public Object AddPrize([FromBody] Prize prize1)
         {
             try
             {
-                Prize prize1 = db.Prizes.Find(id);
-                db.Prizes.Remove(prize1);
-                db.SaveChanges();
-                return "Record Deleted";
+                service.Add(prize1);
+                return true;
             }
-
             catch (Exception)
             {
-                return "Something went wrong. Please Check!";
+
+                return false;
             }
         }
 
-        [HttpGet]
-        [Route("NobelPrize")]
-        public IEnumerable<NobelPrize> GetNobelPrizes()
+        //Update Prize  
+        [HttpPut("UpdatePrize")]
+        public Object UpdatePrize(int id, Prize prize1)
         {
-            var result = (from p in db.Prizes
-                          join l in db.Laureates on p.PrizeId equals l.PrizeId
-                          select new NobelPrize()
-                          {
-                              PrizeId = p.PrizeId,
-                              Year = p.Year,
-                              Category = p.Category,
-                              LaureateId = l.LaureateId,
-                              Firstname = l.Firstname,
-                              Surname = l.Surname,
-                              Motivation = l.Motivation,
-                              Share = l.Share,
-                              OverallMotivation = p.OverallMotivation
-
-                          }).ToList();
-            return result;
-        }
-        
-        private async Task<string> WriteFile(IFormFile file)
-        {
-            string fileName = "";
             try
             {
-                var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files");
-
-                if (!Directory.Exists(pathBuilt))
-                {
-                    Directory.CreateDirectory(pathBuilt);
-                }
-
-                //Get file extension              
-                fileName = file.FileName;
-
-                var fileNameWithPath = Path.Combine(pathBuilt, fileName);
-
-                if (System.IO.File.Exists(fileNameWithPath) == true)
-                {
-                    return fileName + " file already exist.";
-                }
-                else
-                {
-                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-                }
+                service.UpdateByID(id, prize1);
+                return true;
             }
             catch (Exception)
             {
+                return false;
             }
-
-            return fileName + " is uploaded successfully";
         }
 
-
-        [HttpPost]
-        [Route("UploadFile")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
+        //Delete Person  
+        [HttpDelete("DeletePrize")]
+        public bool DeletePrize(int id)
         {
-            var result = await WriteFile(file);
-            return Ok(result);
+            try
+            {
+                service.DeleteRecord(id);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-
-        [HttpGet]
-        [Route("DownloadFile")]
-        public async Task<ActionResult> DownloadFile(string Namefile)
+        //Get Prize By Year & Category
+        [HttpGet("GetPrizeByYear&Category")]
+        public Object GetByCategoryYear(string cat, string year)
         {
-            //...Code for validation and get the file
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\files", Namefile);
-            if (System.IO.File.Exists(filePath))
-            {
-                var provider = new FileExtensionContentTypeProvider();
-                if (!provider.TryGetContentType(filePath, out var contentType))
-                {
-                    contentType = "application/octet-stream";
-                }
-                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-                return File(bytes, contentType, Path.GetFileName(filePath));
-            }
-            else
-            {
-                return Ok ( "File not found.");
-            }
+            var data = service.GetListByYearCategory(cat, year);
+            return data;
+        }
+
+        //Get Prize By Firstname
+        [HttpGet("GetPrizeByFirstname")]
+        public Object GetPrizeByFirstname(string name)
+        {
+            var data = service.GetLaureateByFirstName(name);
+            return data;
+        }
+
+        //Get Prize By Year
+        [HttpGet("GetByYear")]
+        public Object GetByYear()
+        {
+            var data = service.GetYearPrize();
+            return data;
+
         }
 
     }
-
 
 }
 

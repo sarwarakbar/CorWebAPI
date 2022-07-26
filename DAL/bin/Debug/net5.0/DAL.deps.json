@@ -8,7 +8,6 @@
     ".NETCoreApp,Version=v5.0": {
       "DAL/1.0.0": {
         "dependencies": {
-          "BAL": "1.0.0",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "5.0.0",
           "Microsoft.EntityFrameworkCore": "5.0.0",
           "Microsoft.EntityFrameworkCore.Design": "5.0.0",
@@ -904,16 +903,6 @@
           "System.Xml.ReaderWriter": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
         }
-      },
-      "BAL/1.0.0": {
-        "dependencies": {
-          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "5.0.0",
-          "Microsoft.EntityFrameworkCore": "5.0.0",
-          "Newtonsoft.Json": "13.0.2-beta1"
-        },
-        "runtime": {
-          "BAL.dll": {}
-        }
       }
     }
   },
@@ -1594,11 +1583,6 @@
       "sha512": "sha512-MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
-    },
-    "BAL/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

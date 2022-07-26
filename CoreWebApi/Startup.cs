@@ -15,6 +15,10 @@ using DAL;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using DAL.Interface;
+using DAL.Repository;
+using BAL.Service;
+using DAL.Model;
 
 namespace CoreWebApi
 {
@@ -39,6 +43,9 @@ namespace CoreWebApi
             services.AddDbContext<AppDbContext>
            (o => o.UseSqlServer(Configuration.
             GetConnectionString("ConStringDatabase")));
+            services.AddHttpClient();
+            services.AddTransient<IRepository<Prize>, RepositoryPrize>();
+            services.AddTransient<PrizeService, PrizeService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

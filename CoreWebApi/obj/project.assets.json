@@ -1528,6 +1528,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
+          "DAL": "1.0.0",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "5.0.0",
           "Microsoft.EntityFrameworkCore": "5.0.0",
           "Newtonsoft.Json": "13.0.2-beta1"
@@ -1543,7 +1544,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "BAL": "1.0.0",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "5.0.0",
           "Microsoft.EntityFrameworkCore": "5.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.0",
@@ -5719,7 +5719,6 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "BAL >= 1.0.0",
-      "DAL >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 5.0.0",
       "Microsoft.EntityFrameworkCore >= 5.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.0",
@@ -5761,9 +5760,6 @@
           "projectReferences": {
             "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj": {
               "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\BAL\\BAL.csproj"
-            },
-            "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj": {
-              "projectPath": "C:\\Users\\DELL\\Desktop\\LocalRepoProject\\DAL\\DAL.csproj"
             }
           }
         }
