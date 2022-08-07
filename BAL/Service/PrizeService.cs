@@ -9,18 +9,24 @@ using DAL.Repository;
 
 namespace BAL.Service
 {
-    public class PrizeService
+    public class PrizeService :IRepositoryBAL
     {
-        private readonly IRepository<Prize> _prize;
-        public PrizeService(IRepository<Prize> _prize)
+        private readonly IRepositoryDAL _prize;
+        public PrizeService(IRepositoryDAL _prize)
         {
             this._prize = _prize;
         }
 
-        //Get All Prize Records List
-        public IEnumerable<Prize> GetAllPrizes()
+        public PrizeService()
         {
-            return _prize.GetAll().ToList();
+
+        }
+
+        //Get All Prize Records List        
+        public IEnumerable<Prize> GetAll()
+        {
+             var data= _prize.GetAll().ToList();
+            return data;
         }
 
         //Get All Prize List by Year only
@@ -33,8 +39,8 @@ namespace BAL.Service
         public IEnumerable<Prize> GetListByYearCategory(string cat, string year)
         {
             var result = _prize.GetByYearCategory(cat, year).ToList();
-            return result;
-
+            return result;            
+          
         }
 
         //Find Laureate by FirstName
@@ -64,8 +70,14 @@ namespace BAL.Service
             return "Record Deleted";
         }
 
+        public IEnumerable<Prize> GetById(int id)
+        {
+            var result = _prize.GetById(id);
+            yield return result;
+
+        }
+
 
 
     }
-
 }

@@ -13,11 +13,11 @@ namespace DAL.Extension
             List<Model.Laureate> results = (from l in Laureate
                                              select new Model.Laureate()
                                              {
-                                                 Firstname = l.firstname,
-                                                 Motivation = l.motivation,
-                                                 RemoteIdentifier = l.id,
-                                                 Share = l.share,
-                                                 Surname = l.surname
+                                                 Firstname = l.firstname ?? String.Empty,
+                                                 Motivation = l.motivation ?? String.Empty,
+                                                 RemoteIdentifier = l.id ?? String.Empty,
+                                                 Share = l.share ?? String.Empty,
+                                                 Surname = l.surname ?? String.Empty
                                              }).ToList();
             return results;
         }

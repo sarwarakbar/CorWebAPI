@@ -19,6 +19,9 @@ using DAL.Interface;
 using DAL.Repository;
 using BAL.Service;
 using DAL.Model;
+using BAL;
+using BAL.GenService;
+using DAL.Generic;
 
 namespace CoreWebApi
 {
@@ -43,9 +46,18 @@ namespace CoreWebApi
             services.AddDbContext<AppDbContext>
            (o => o.UseSqlServer(Configuration.
             GetConnectionString("ConStringDatabase")));
+            services.AddControllers();
             services.AddHttpClient();
-            services.AddTransient<IRepository<Prize>, RepositoryPrize>();
-            services.AddTransient<PrizeService, PrizeService>();
+
+            services.AddTransient<IRepositoryDAL, RepositoryPrize>();           
+            services.AddTransient<IRepositoryBAL, PrizeService>();
+
+            //Services for Generic Methods
+            services.AddTransient<IRepositoryDALGen<Prize>, RepositoryGenData>();
+            services.AddTransient<GenPrizeService, GenPrizeService>();
+           
+
+           // services.AddTransient<PrizeService, PrizeService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

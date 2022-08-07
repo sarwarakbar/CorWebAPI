@@ -43,9 +43,9 @@ namespace DAL
 
                     context.SaveChanges();
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
-                    throw ex;
+                    throw ;
                 }
             }
 
