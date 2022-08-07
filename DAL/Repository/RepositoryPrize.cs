@@ -12,18 +12,21 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace DAL.Repository
 {
-    public class RepositoryPrize : IRepository<Prize>
+    public class RepositoryPrize :IRepositoryDAL
     {
         AppDbContext db;
         public RepositoryPrize(AppDbContext db)
         {
             this.db = db;
         }
-             
+
+     
+
         //Get all prize list
         public IEnumerable<Prize> GetAll()
         {
-            return db.Prizes.Include(c => c.Laureates).ToList();
+             var data = db.Prizes.Include(c => c.Laureates).ToList();
+            return data;
         }
 
         //Get all Laureate List
@@ -38,11 +41,13 @@ namespace DAL.Repository
             return db.Prizes.Include(c => c.Laureates).OrderBy(x => x.Year).ToList();
         }
 
+
         //Get Prize List by Year & Category
         public IEnumerable<Prize> GetByYearCategory(string cat, string year)
         {
             return db.Prizes.Include(c => c.Laureates).Where(x => x.Category.ToLower().Contains(cat.ToLower()) && x.Year.ToLower() == year).ToList();
         }
+
 
         //Get Laureate List in Ascending order
         public IEnumerable<Laureate> GetLaureatesAsc()
@@ -50,6 +55,7 @@ namespace DAL.Repository
             var data = db.Laureates.Include(c => c.Prize).OrderBy(x => x.LaureateId).ToList();
             return data;
         }
+
 
         //Get Laureate by Firstname
         public IEnumerable<Laureate> GetLaureateByName(string name)
@@ -73,6 +79,8 @@ namespace DAL.Repository
                 return "Enter Correct credentials!";
             }
         }
+
+
 
         //Update Prize by ID
         public Prize UpdatePrizeById(int id, Prize prize1)
@@ -127,16 +135,15 @@ namespace DAL.Repository
                               OverallMotivation = p.OverallMotivation
 
                           }).ToList();
-
-            return result;
+            
+                        return result;
         }
 
         //Search by ID
         public Prize GetById(int id)
         {
-            var data = db.Prizes.Include(c => c.Laureates).Where(c => c.PrizeId == id).FirstOrDefault();
-            return data;
-
+            return db.Prizes.Include(c => c.Laureates).Where(c => c.PrizeId == id).FirstOrDefault();            
+        
         }
     }
 }
